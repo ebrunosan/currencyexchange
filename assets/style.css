@@ -27,8 +27,8 @@ section {
 }
 
 #left-sec { background-color:#aaa;}
-#center-sec { background-color:#bbb;}
-#right-sec { background-color:#ccc;}
+#center-sec { background-color:#f1f1f1;}
+#right-sec { background-color:#bbb;}
 
 .title {
   color: grey;
