@@ -20,22 +20,15 @@
 
 	<main>
 		<form action="/.html">
-			<label class="title">Currency FROM</label>
-			<select name="currency_from" id="currency_from">
-				<option value="BRL">BRL<option>
-				<option value="CAD">CAD<option>
-				<option value="USD">USD<option>
-			<select>
-			<br/>
-			<label class="title">Amount FROM</label>
-			<input type="text" id="amount_from" name="amount_from"<input>
-			<br/>
-			<label class="title">Currency TO</label>
-			<select name="currency_from" id="currency_from">
-				<option value="BRL">BRL<option>
-				<option value="CAD">CAD<option>
-				<option value="USD">USD<option>
-			<select>
+			<label class="title">Amount </label>
+			<input type="number" min="1" max="1000" id="amount_from" name="amount_from" value="1.00">
+
+			<label class="title">from</label>
+			<select name="currency_from" id="currency_from"><select>
+
+			<label class="title">to</label>
+			<select name="currency_to" id="currency_to"><select>
+
 			<br/>
 			<span id="amount_to" name="amount_to">3000 CAD = 9000.00 BRL</span>
 			<br/>

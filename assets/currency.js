@@ -1,5 +1,5 @@
 "use strict";
-var $ = function (id) {
+let $ = function (id) {
     return document.getElementById(id);
 }
 
@@ -14,8 +14,8 @@ const url			= web_site + endpoint + '?access_key=' + access_key + '&currencies='
 
 //console.log(url);
 
-// ORIGINAL Json
-var jsonObj = {
+// ORIGINAL json
+let jsonObj = {
 	"success":true,
 	"terms":"https:\/\/currencylayer.com\/terms",
 	"privacy":"https:\/\/currencylayer.com\/privacy",
@@ -24,29 +24,30 @@ var jsonObj = {
 	"quotes":{"USDCAD":1.29981,"USDBRL":3.719599,"USDUSD":1}
 }
 
-// CONVERTED Json
-var quotes = {};
-/*
-	"USD": { "CAD":1.29981, "BRL":3.719599 }
+// CONVERTED json
+let quotes = {};
+/* 
+	{"USD": { "CAD":1.29981, "BRL":3.719599 }
 	"CAD": { "USD":0.769343, "BRL":2.861648 }	-- 1/USD->CAD , CAD->USD * USD->BRL
-	"CAD": { "USD":0.769343, "BRL":2.861648 }	-- 1/USD->BRL , BRL->USD * USD->CAD
+	"BRL": { "USD":0.769343, "CAD":2.861648 }	-- 1/USD->BRL , BRL->USD * USD->CAD
+	}
 */
 
-var parseUsdQuote = function() {
-	// Original quotes format: "quotes":{"USDCAD":1.29981,"USDBRL":3.719599,"USDUSD":1}
+let parseUsdQuote = function() {
+	// Original: "quotes":{"USDCAD":1.29981,"USDBRL":3.719599,"USDUSD":1}
 	let newObj = {};
-	for (var key in jsonObj.quotes) {
+	for (let key in jsonObj.quotes) {
 		if (key.substr(3,3) !== usd) {
 			newObj[key.substr(3,3)] = jsonObj.quotes[key];
 		}
 	}
-	// Expected quotes["USD"] = { "CAD":1.29981, "BRL":3.719599 }	
+	// Expected: quotes["USD"] = { "CAD":1.29981, "BRL":3.719599 }	
 	quotes[usd] = newObj;
 	
 	parseOthersQuotes();							// Format others exchange rates
 }
 
-var parseOthersQuotes = function() {
+let parseOthersQuotes = function() {
 	let newObj;
 	let fromSymbol, fromRate;
 	for (let symbol in quotes[usd]) {				// forEach USD currency
@@ -65,10 +66,65 @@ var parseOthersQuotes = function() {
 		}
 		quotes[fromSymbol] = newObj;
 	}
-	console.log(quotes);
+	
+	initCombos();								// Botch combos FROM and TO
 }
 
+let initCombos = function() {
+	// set Default option
+	let defaultOption = document.createElement('option');
+	defaultOption.text = 'Choose';
+
+	let cmbFrom = $("currency_from");
+	cmbFrom.length = 0;
+	let cloneNode = defaultOption.cloneNode(true)
+	cmbFrom.add(defaultOption);
+	cmbFrom.selectedIndex = 0;
+
+	let option;
+	for (let symbol in quotes) {
+		option = document.createElement('option');
+		option.text = symbol;
+		option.value = symbol;
+		cmbFrom.add(option);
+	}	
+}
+
+let refreshCmbTo = function() {
+	let currencyFrom = $("currency_from").value;
+	
+	// set Default option
+	let defaultOption = document.createElement('option');
+	defaultOption.text = 'Choose';
+
+	let cmbTo = $("currency_to");
+	cmbTo.length = 0;
+	cmbTo.add(defaultOption);
+	cmbTo.selectedIndex = 0;
+	
+	let option;
+	for (let symbol in quotes[currencyFrom]) {
+		option = document.createElement('option');
+		option.text = symbol;
+		option.value = quotes[currencyFrom][symbol];
+		console.log(option);
+		cmbTo.add(option);
+	}
+}
+
+let refreshAmountTo = function() {
+	// TODO
+	// not working console.log($("currency_to").selected);
+	$("amount_to").innerHTML = ("1 " 
+				+ $("currency_from").value 
+				+ " = " + $("currency_to").value 
+				+ " " + $("currency_to").text);
+	//console.log("1 " + $("currency_from").value + " = " $("currency_to").value + " " + $("currency_to"));
+}
+
+
 window.onload = function () {
-    //$("calculate").onclick = processEntries;
+    $("currency_from").onchange = refreshCmbTo;
+    $("currency_to").onchange = refreshAmountTo;
 	parseUsdQuote();
 }
