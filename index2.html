@@ -1,22 +1,32 @@
 <!DOCTYPE html>
 <html>
-<head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script>
-$(document).ready(function(){
-    $("button").click(function(){
-        $.get("http://data.fixer.io/api/latest?access_key=69342bf535523c941f3290a447bebf67&format=1", 
-		function(data, status){
-            console.log("Data: " + data + "\nStatus: " + status);
-            console.log(data);
-        });
-    });
-});
-</script>
-</head>
-<body>
+    <head>
+        <title>Bruno Santos | Create users</title>
+        <meta charset="utf-8">
+    </head>
 
-<button>Send an HTTP GET request to a page and get the result back</button>
+    <!-- BODY -->
+    <body>
+        <button id="insert">Insert users into Firebase</button>
+        <br/><button id="login">Login user</button>
+        <br/><button id="logout">Logout user</button>
+    </body>
 
-</body>
+    <!-- SCRIPTS -->
+    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
+    <!-- Add additional services you want to use -->
+<!--    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-auth.js"></script>-->
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyDPVlrenGYFaqRDIhipmTxeP6TKWdpPn5M",
+        authDomain: "my-currency-community.firebaseapp.com",
+        databaseURL: "https://my-currency-community.firebaseio.com",
+        projectId: "my-currency-community",
+        storageBucket: "my-currency-community.appspot.com",
+        messagingSenderId: "539261265518"
+      };
+      firebase.initializeApp(config);
+    </script>
+    <script src="assets/users.js"></script>
 </html>
