@@ -1,41 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-	<title>Bruno Santos | Home</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" type="text/css" href="assets/style.css">
-</head>
-<body>
-	<header>
-		Community Currency Exchange
-	</header>
+<html>
+    <head>
+        <title>Bruno Santos | login users</title>
+        <meta charset="utf-8">
+    </head>
 
-	<section id="left-sec"> 
-		<p class="title">Canada</p>
-		<!-- HERE it will be add users NODES -->
-		<!-- HERE it will be add users NODES -->
-	</section>
+    <!-- BODY -->
+    <body>
+        <br/><button id="login">Login user</button>
+        <br/><button id="logout">Logout user</button>
+    </body>
 
-	<section id="center-sec"> 
-		<p class="title">Negociation Table</p>
-	</section> 
-
-	<section id="right-sec"> 
-		<p class="title">Brazil</p>
-		<!-- HERE it will be add users NODES -->
-		<!-- HERE it will be add users NODES -->
-	</section> 
-
-	<footer>
-	<!--	<a href="https://www.linkedin.com/in/ebrunosan/"><i class="fa fa-linkedin"></i></a>  
-		<a href="http://twitter.com/ebrunosan"><i class="fa fa-twitter"></i></a>  
-		<a href="https://ebrunosan.wordpress.com/"><i class="fa fa-wordpress"></i></a> 
-		<a href="https://github.com/ebrunosan"><i class="fa fa-github"></i></a> 
-		<a href="https://stackoverflow.com/users/9797034/bruno-santos"><i class="fa fa-stack-overflow"></i></a> 
-		<a href="https://codepen.io/ebrunosan/#"><i class="fa fa-codepen"></i></a> -->
-	</footer>
-
-	<script src="assets/init.js"></script>
-</body>
+    <!-- SCRIPTS -->
+    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
+    <!-- Add additional services you want to use -->
+<!--    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-auth.js"></script>-->
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyDPVlrenGYFaqRDIhipmTxeP6TKWdpPn5M",
+        authDomain: "my-currency-community.firebaseapp.com",
+        databaseURL: "https://my-currency-community.firebaseio.com",
+        projectId: "my-currency-community",
+        storageBucket: "my-currency-community.appspot.com",
+        messagingSenderId: "539261265518"
+      };
+      firebase.initializeApp(config);
+    </script>
+    <script src="js/login.js"></script>
 </html>
