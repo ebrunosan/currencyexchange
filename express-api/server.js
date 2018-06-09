@@ -6,7 +6,7 @@
 let admin = require("firebase-admin");
 let fetch = require("node-fetch");
 
-var serviceAccount = require("./test/my-firebase-adminsdk.json");
+var serviceAccount = require("./keys/my-firebase-adminsdk.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -66,11 +66,14 @@ let deleteSingleUser = function(uid) {
 let addUserToFirebase = function(users) {
     users.map( user => {
         console.log("Login=" + user.login.username +" EMAIL="+ user.email);
-        console.log(user.name);
+        user.name.first = user.name.first.charAt(0).toUpperCase() + user.name.first.substr(1);
+        user.name.last = user.name.last.charAt(0).toUpperCase() + user.name.last.substr(1);
+        let properName = `${user.name.first} ${user.name.last}`;
+        console.log(properName + " - " + user.phone);
         
         admin.auth().createUser({
-            displayName:    `${user.name.first} ${user.name.last}`,
-            photoURL:       user.picture.medium,
+            displayName:    properName,
+            photoURL:       user.picture.large,
             email:          user.email,
             uid:            user.login.username,// set UID as login.username
             password:       "password",         // FIXED password

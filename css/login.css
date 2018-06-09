@@ -1,0 +1,52 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Nunito', sans-serif;
+/*    outline: none;*/
+}
+
+.page-title-pipe {
+    margin-left: 10px;
+}
+
+.btn-right-icon {
+    margin-left: 10px;
+}
+
+/* LOGIN PAGE */
+.login-cover {
+    background: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;       /* percent width relative to the viewport */
+    height: 100vh;      /* percent height relative to the viewport */
+    z-index: 100;       /* hide page */
+
+    /* align icon both vertically and horizontally */
+    /* ref.: https://css-tricks.com/centering-css-complete-guide */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#login-progress {
+    display: none;
+}
+
+#msgLoginError {
+    display: none;
+}
+
+/* CARDS */
+
+.demo-card-wide.mdl-card {
+  width: 310px;
+}
+.demo-card-wide > .mdl-card__title {
+  color: #fff;
+  height: 310px;
+  background: url('https://randomuser.me/api/portraits/med/women/66.jpg') center / cover;
+}
+.demo-card-wide > .mdl-card__menu {
+  color: #fff;
+}
