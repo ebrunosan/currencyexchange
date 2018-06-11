@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Bruno Santos | login users</title>
+        <title>Bruno Santos [eBrunoSan]</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -37,7 +37,7 @@
 
                 <!-- PASSWORD  -->
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="text" id="user-pswd">
+                    <input class="mdl-textfield__input" type="password" id="user-pswd">
                     <label class="mdl-textfield__label" for="user-pswd">Password...</label>
                 </div>
 
@@ -62,39 +62,84 @@
 
         <!-- Main page -->
         
-        <div class="mdl-layout mdl-js-layout">
-          <header class="mdl-layout__header">
-              
-            <div class="mdl-layout-icon"></div>
-              
-            <div class="mdl-layout__header-row">
-              <span class="mdl-layout__title">Social Currency 
-                  <span class="page-title-pipe"> | </span> 
-                  <span class="page-title-pipe">Login</span>
-              </span>
+        <!-- Always shows a header, even in smaller screens. -->
+        <div class = "mdl-layout mdl-js-layout mdl-layout--fixed-header">
+          
+          <header class = "mdl-layout__header">
+            <div class = "mdl-layout__header-row">
+               <!-- Title -->
+               <span class="mdl-layout__title">Social Currency</span>
                 
-              <div class="mdl-layout-spacer"></div>
+               <!-- Add spacer, to align navigation to the right -->
+               <div class = "mdl-layout-spacer"></div>
                 
-              <nav class="mdl-navigation">
-                <button id="btn-logout" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
-                  Sign out <img class="btn-right-icon" src="image/twotone-account_circle-24px.svg"/>
-                </button>
-              </nav>
+               <!-- Navigation -->
+               <nav class = "mdl-navigation">
+                    <button id = "btn-logout" class = "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
+                    Sign out <img class = "btn-right-icon" src = "image/twotone-account_circle-24px.svg"/>
+                    </button>
+               </nav>
             </div>
-              
           </header>
-          <div class="mdl-layout__drawer"></div>
-        </div>
-<!--
-        <br/><button id="login">Login user</button>
-        <br/><button id="logout">Logout user</button>
--->
-        <!-- Firebase scripts -->
-<!--        <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>-->
-        <!-- Add additional services you want to use -->
-    <!--    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-auth.js"></script>-->
-<!--
-        <script>
+         
+          <div class = "mdl-layout__drawer">
+            <span class = "mdl-layout-title">eBrunoSan</span>
+            <nav class = "mdl-navigation">
+               <a class = "mdl-navigation__link" href = "">Home</a>
+               <a class = "mdl-navigation__link" href = "">Logout</a>
+               <a class = "mdl-navigation__link" href = "">My profile</a>
+               <a class = "mdl-navigation__link" href = "">My transfers</a>
+               <a class = "mdl-navigation__link" href = "">About</a>    
+            </nav>
+          </div>
+      
+          <main class = "mdl-layout__content  mdl-color--grey-300">
+            <div class = "mdl-grid">
+                
+                <!-- MDL card - User -->
+                <div class="card-user mdl-cell mdl-cell--6-col mdl-card mdl-shadow--6dp">
+                    <div id="user-picture" class="mdl-card__title">
+                      <h2 id="user-name" class="mdl-card__title-text">User Name</h2>
+                    </div>
+
+                    <div id="user_info" class="mdl-card__supporting-text">
+                      <!-- USER INFO TO BE HERE -->
+                    </div>
+
+                    <div class="mdl-card__actions mdl-card--border">
+                      <div class="mdl-layout-spacer"></div>
+                      <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Edit</button>
+                    </div>
+                </div> <!-- MDL card -->
+                
+                <!-- MDL card - Transfer -->
+                <div class="card-transfer mdl-cell mdl-cell--6-col mdl-card mdl-shadow--6dp">
+                    <figure class="mdl-card__media">
+                      <img id="transfer-flag" src="http://via.placeholder.com/350x350" alt="" />
+                    </figure>
+
+                    <div class="mdl-card__title">
+					  <h1  id="transfer-title" class="mdl-card__title-text">From XXX to YYY</h1>
+				    </div>
+
+                    <div id="user_info" class="mdl-card__supporting-text">
+                        <span id="transfer-details">XXX$ 999 | 1 XXX = 1.99999 YYY | Total YYY $ 9999.99</span>
+                    </div>
+
+                    <div class="mdl-card__actions mdl-card--border">
+                      <div class="mdl-layout-spacer"></div>
+                      <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Edit</button>
+                    </div>
+                </div> <!-- MDL card -->
+                
+              </div> <!-- MDL grid -->
+         </main>
+          
+      </div> <!-- MDL layout -->
+        
+      <!-- Firebase scripts -->
+      <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
+      <script>
           // Initialize Firebase
           var config = {
             apiKey: "AIzaSyDPVlrenGYFaqRDIhipmTxeP6TKWdpPn5M",
@@ -105,13 +150,12 @@
             messagingSenderId: "539261265518"
           };
           firebase.initializeApp(config);
-        </script>
--->
+      </script>
 
-        <!-- Page scripts -->
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+      <!-- Page scripts -->
+      <script src="https://code.jquery.com/jquery-3.3.1.min.js"
           integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
           crossorigin="anonymous"></script>
-        <script src="js/login.js"></script>
+      <script src="js/login.js"></script>
     </body>
 </html>

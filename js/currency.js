@@ -33,7 +33,7 @@ let initQuotes = function() {
 	const web_site		= 'http://apilayer.net/api/';
 	const endpoint 		= 'live'
 	const access_key 	= '01daf97ed23634986ca1ce507dde70e7';
-	const currencies 	= 'CAD,BRL,EUR';
+	const currencies 	= 'AUD,BRL,CAD,CLP';
 	const url			= web_site + endpoint + '?access_key=' + access_key + '&currencies=' + currencies;
 
 	// ORIGINAL CALL FOR FETCHING API's DATA
