@@ -20,18 +20,22 @@ firebase.auth().onAuthStateChanged(function(user) {
 
         console.log("user logged IN");
         let user = firebase.auth().currentUser;
-        console.log(user);
+//        console.log(user);
 
         $(".login-cover").hide();       // -- Hide login dialog
         dialog.close();
 
         if (user !== null) {
-            console.log(user.displayName);
-            console.log(user.email);
-            console.log(user.photoURL);
-            $("#card-picture").css('background-image', 'url(' + user.photoURL + ')');
+            // TODO: create CARD 'Transfer' for each USER database
+            firebase.database().ref('/users/' + user.uid).once('value').then(function(snapshot) {
+              let userObj = snapshot.val();
+              $("#user-picture").css('background-image', 'url(' + user.photoURL + ')');
+              $("#user-name").text(user.displayName);
+              $("#user_info").html(`${user.email}<br>Phone: ${userObj.phone}`);
+
+              $("#money-wanted").text(`${userObj.nat_withdraw} $ ${userObj.tot_withdraw}`);
+            });
             
-            $("#user_info").html(`${user.displayName}<br>${user.email}<br>${user.uid}`);
         } //end user not null
 
 
@@ -65,7 +69,7 @@ $(function() {
     $("#btn-login").click( (evt) => {
         let email = $("#user-email").val();
         let pswd = $("#user-pswd").val();
-        console.log(email +" - "+ pswd);
+//        console.log(email +" - "+ pswd);
 
         $("#login-progress").show();
         $("#btn-login").hide();
@@ -80,7 +84,7 @@ $(function() {
         $("#login-progress").hide();
         $("#btn-login").show();
         
-        console.log("login() okay");
+//        console.log("login() okay");
     
         // REMOVE LATER
         // REMOVE LATER

@@ -24,7 +24,7 @@ admin.initializeApp({
 let initApp = function() {
     deleteAllUsers();
 
-	const url = 'https://randomuser.me/api/?results=6&nat=ca,br&inc=login,name,email,picture,nat';
+	const url = 'https://randomuser.me/api/?results=10&nat=au,ca,ch,br,us&inc=login,name,email,picture,nat,phone';
 
 	fetch(url)
 		.then( response => {
@@ -63,16 +63,60 @@ let deleteSingleUser = function(uid) {
     ; // END deleteUser
 }
 
+let formatName = function(fName, lName) {
+    fName = fName.charAt(0).toUpperCase() + fName.substr(1);
+    lName = lName.charAt(0).toUpperCase() + lName.substr(1);
+    return `${fName} ${lName}`;
+}
+
+let formatNat = function(nat) {
+    let ret = '';
+    switch (nat) {
+        case 'CA':
+            ret = 'CAD';
+            break;
+        case 'CH':
+            ret = 'CLP';
+            break;
+        case 'BR':
+            ret = 'BRL';
+            break;
+        case 'US':
+            ret = 'USA';
+            break;
+        case 'AU':
+            ret = 'AUD';
+            break;
+    }
+    return ret;
+}
+
+let rndTransferNat = function(nat) {
+    // TODO
+    return 'BRL';
+}
+
+let addUserDataToFirebase = function(user) {
+    // TODO generate random nat_deposit and tot_withdraw
+    let userObj = {
+        'phone': user.phone,
+        'nat_withdraw': formatNat(user.nat),
+        'tot_withdraw': 500,
+        'nat_deposit': rndTransferNat(user.nat),
+    };
+    console.log(userObj);
+    admin.database().ref('users/').child(user.login.username).set(userObj); 
+    // END database
+//                 "nat").set(user.nat)
+//            .child("phone").set(user.phone)
+//            .child("money_wanted").set(0.0)
+    ; // END database
+}
+
 let addUserToFirebase = function(users) {
     users.map( user => {
-        console.log("Login=" + user.login.username +" EMAIL="+ user.email);
-        user.name.first = user.name.first.charAt(0).toUpperCase() + user.name.first.substr(1);
-        user.name.last = user.name.last.charAt(0).toUpperCase() + user.name.last.substr(1);
-        let properName = `${user.name.first} ${user.name.last}`;
-        console.log(properName + " - " + user.phone);
-        
         admin.auth().createUser({
-            displayName:    properName,
+            displayName:    formatName(user.name.first, user.name.last),
             photoURL:       user.picture.large,
             email:          user.email,
             uid:            user.login.username,// set UID as login.username
@@ -81,17 +125,24 @@ let addUserToFirebase = function(users) {
             disabled:       false
     
             }).then(function(userRecord) {
-                console.log("Successfully created new user:", userRecord.uid);
+                console.log("Successfully created new user:", user.login.username);
 
             }).catch(function(error) {
-                console.log("Error creating new user:", error);
+                console.log("Error creating new user:", user.login.username);
             })
+            
+            let userObj = {
+                'phone': user.phone,
+                'nat_withdraw': formatNat(user.nat),
+                'tot_withdraw': 500,
+                'nat_deposit': rndTransferNat(user.nat),
+            };
+            // console.log(userObj);
+
+            admin.database().ref('users/' + user.login.username).set(userObj);
+
         ; // END CreateUser
         
-        admin.database()                        // Add user into FB                     
-            .ref('users/' + user.nat + "/" + user.login.username)
-            .child("money_wanted").set(0.0)
-        ; // END database
     });
 }
 

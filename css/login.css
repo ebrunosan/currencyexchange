@@ -4,10 +4,6 @@
 /*    outline: none;*/
 }
 
-.page-title-pipe {
-    margin-left: 10px;
-}
-
 .btn-right-icon {
     margin-left: 10px;
 }
@@ -38,15 +34,30 @@
 }
 
 /* CARDS */
+.mdl-grid {
+	max-width: 900px;
+}
 
-.demo-card-wide.mdl-card {
+.mdl-card__actions {
+	display: flex;
+	box-sizing:border-box;
+	align-items: center;
+}
+
+.mdl-card {
   width: 310px;
 }
-.demo-card-wide > .mdl-card__title {
+
+#user-picture {
   color: #fff;
   height: 310px;
-  background: url('https://randomuser.me/api/portraits/med/women/66.jpg') center / cover;
+  background: url('http://via.placeholder.com/150x150') center / cover;
 }
-.demo-card-wide > .mdl-card__menu {
-  color: #fff;
+
+.mdl-card__media {
+	margin: 0;
 }
+.mdl-card__media > img {
+	max-width: 100%;
+}
+
