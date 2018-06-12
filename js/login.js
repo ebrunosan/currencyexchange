@@ -28,14 +28,14 @@ let quotes = {};            // TODO: create a class to set/get quotes
 	(2) TO fixed currencies quotes: CAD, BRL, EUR 
 */
 let initQuotes = function() {
-    if( localStorage.quotes ) {                    // check if there is data on localStorade
-		quotes = JSON.parse(localStorage.quotes);  // TODO: set/get quote expiration time 
-	} else {
+//    if( localStorage.quotes ) {                    // check if there is data on localStorade
+//		quotes = JSON.parse(localStorage.quotes);  // TODO: set/get quote expiration time 
+//	} else {
         firebase.database().ref('/quotes/').once('value').then(function(snapshot) {
             quotes = snapshot.val();
             localStorage.quotes = JSON.stringify(quotes);
         });
-    }
+//    }
 };
 
 /*--
