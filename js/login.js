@@ -28,71 +28,14 @@ let quotes = {};            // TODO: create a class to set/get quotes
 	(2) TO fixed currencies quotes: CAD, BRL, EUR 
 */
 let initQuotes = function() {
-	if( localStorage.quotes ) {                    // check if there is data on localStorade
-		quotes = JSON.parse(localStorage.quotes);  // TODO: set/get quote expiration date 
+    if( localStorage.quotes ) {                    // check if there is data on localStorade
+		quotes = JSON.parse(localStorage.quotes);  // TODO: set/get quote expiration time 
 	} else {
-        const web_site		= 'http://apilayer.net/api/';
-        const endpoint 		= 'live'
-        const access_key 	= '01daf97ed23634986ca1ce507dde70e7';
-        const currencies 	= 'AUD,BRL,CAD,CLP';
-        const url			= web_site + endpoint + '?access_key=' + access_key + '&currencies=' + currencies;
-
-        console.log(url);
-        fetch(url).then( response => {
-            return response.json();
-        })
-        .then( jsonObj => {
-            console.log(jsonObj);
-            buildUsdQuote(jsonObj);             // Build USD quotes received from API
-            buildOthersQuotes();                // Format others exchange rates
+        firebase.database().ref('/quotes/').once('value').then(function(snapshot) {
+            quotes = snapshot.val();
             localStorage.quotes = JSON.stringify(quotes);
-        })
-        .catch( err => {
-            console.log("error calling apilayer");
         });
     }
-};
-
-/*--
-	It split and build a json quote object based on:
-	(1) USD quotes from API
-*/
-let buildUsdQuote = function(jsonObj) {
-	// Original: "quotes":{"USDCAD":1.29981,"USDBRL":3.719599,"USDUSD":1}
-	let newObj = {};
-	for (let key in jsonObj.quotes) {
-		if (key.substr(3,3) !== usd) {
-			newObj[key.substr(3,3)] = jsonObj.quotes[key];
-		}
-	}
-	// Expected: quotes["USD"] = { "CAD":1.29981, "BRL":3.719599 }	
-	quotes[usd] = newObj;
-};
-
-/*--
-	It calculater others quotes based on:
-	(1) USD quotes from json object
-*/
-let buildOthersQuotes = function() {
-	let newObj, fromSymbol, fromRate;
-	
-	for (let symbol in quotes[usd]) {			// forEach USD currency
-		newObj = {};							// clear Obj
-
-		fromSymbol = symbol;
-		fromRate = quotes[usd][symbol];
-
-		// convert to USD exchange rate to 6 decimal places
-		newObj[usd] = parseFloat((1 / quotes[usd][symbol]).toFixed(6));
-
-		for (let symbolLoop in quotes[usd]) {	// forEach USD currency AGAIN
-			if (symbolLoop !== symbol) {		// Others currency exchange
-				newObj[symbolLoop] = parseFloat((newObj[usd] * 
-									quotes[usd][symbolLoop]).toFixed(6));
-			}
-		}
-		quotes[fromSymbol] = newObj;
-	}	
 };
 
 /*--

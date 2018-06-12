@@ -6,7 +6,7 @@
 let admin = require("firebase-admin");
 let fetch = require("node-fetch");
 
-var serviceAccount = require("./keys/my-firebase-adminsdk.json");
+var serviceAccount = require("./../data/my-firebase-adminsdk.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -22,9 +22,9 @@ admin.initializeApp({
 		Reference: https://randomuser.me/documentation
 */
 let initApp = function() {
-    deleteAllUsers();
+    clearUsersLogin();
 
-	const url = 'https://randomuser.me/api/?results=10&nat=au,ca,ch,br,us&inc=login,name,email,picture,nat,phone';
+	const url = 'https://randomuser.me/api/?results=50&nat=au,ca,ch,br,us&inc=login,name,email,picture,nat,phone';
 
 	fetch(url)
 		.then( response => {
@@ -35,9 +35,9 @@ let initApp = function() {
 // 			console.log("error");		        // TODO: catch error
 		})
 	; // END fetch
-}
+};
 
-let deleteAllUsers = function() {
+let clearUsersLogin = function() {
     // list all users into Authentication DB
     admin.auth().listUsers(1000)
         .then(function(listUsersResult) {
@@ -46,30 +46,28 @@ let deleteAllUsers = function() {
                 deleteSingleUser(userRecord.toJSON().uid);
             });
         }).catch(function(error) {
-            console.log("Error listing users:", error);
+            console.log("Error deleting all users:", error);
         })
     ; // END listUsers
     
     admin.database().ref('users').remove();     // clear "users" DB
-}
+};
 
 let deleteSingleUser = function(uid) {
-    admin.auth().deleteUser(uid)
-        .then(function() {
-            console.log("Successfully deleted user");
-        }).catch(function(error) {
-            console.log("Error deleting user:", error);
-        })
-    ; // END deleteUser
-}
+    admin.auth().deleteUser(uid).then(function() {
+        console.log("Successfully deleted user");
+    }).catch(function(error) {
+        console.log("Error deleting user:", error);
+    }); // END deleteUser
+};
 
 let formatName = function(fName, lName) {
     fName = fName.charAt(0).toUpperCase() + fName.substr(1);
     lName = lName.charAt(0).toUpperCase() + lName.substr(1);
     return `${fName} ${lName}`;
-}
+};
 
-let formatNat = function(nat) {
+let getFormattedNat = function(nat) {
     let ret = '';
     switch (nat) {
         case 'CA':
@@ -82,37 +80,54 @@ let formatNat = function(nat) {
             ret = 'BRL';
             break;
         case 'US':
-            ret = 'USA';
+            ret = 'USD';
             break;
         case 'AU':
             ret = 'AUD';
             break;
     }
     return ret;
+};
+
+let getRndInteger = function (min, max) {
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
 
-let rndTransferNat = function(nat) {
-    // TODO
-    return 'BRL';
-}
-
-let addUserDataToFirebase = function(user) {
-    // TODO generate random nat_deposit and tot_withdraw
-    let userObj = {
-        'phone': user.phone,
-        'nat_withdraw': formatNat(user.nat),
-        'tot_withdraw': 500,
-        'nat_deposit': rndTransferNat(user.nat),
+// returns random nat other than param nat
+let getRndCountry = function(natParam) {
+    let nats = { 
+        0:'CAD',
+        1:'CLP',
+        2:'BRL',
+        3:'USD',
+        4:'AUD',
     };
-    console.log(userObj);
-    admin.database().ref('users/').child(user.login.username).set(userObj); 
-    // END database
-//                 "nat").set(user.nat)
-//            .child("phone").set(user.phone)
-//            .child("money_wanted").set(0.0)
-    ; // END database
-}
 
+    let newNat = 0;
+    do {
+        newNat = getRndInteger(0, 4);
+    } while (nats[newNat] === natParam);
+
+    return nats[newNat];
+};
+
+// returns random values: 500 or 1000 or 1500
+let getRandomVal = function(nat) {
+    return 500 * getRndInteger(1,3);
+};
+
+//let addUserDataToFirebase = function(user) {
+//    // TODO generate random nat_deposit and tot_withdraw
+//    let userObj = {
+//        'phone'         : user.phone,
+//        'nat_withdraw'  : getFormattedNat(user.nat),
+//        'tot_withdraw'  : getRandomVal(),
+//        'nat_deposit'   : getRndCountry(user.nat),
+//    };
+//    console.log(userObj);
+//    admin.database().ref('users/').child(user.login.username).set(userObj); 
+//};
+//
 let addUserToFirebase = function(users) {
     users.map( user => {
         admin.auth().createUser({
@@ -132,18 +147,14 @@ let addUserToFirebase = function(users) {
             })
             
             let userObj = {
-                'phone': user.phone,
-                'nat_withdraw': formatNat(user.nat),
-                'tot_withdraw': 500,
-                'nat_deposit': rndTransferNat(user.nat),
+                'phone'         : user.phone,
+                'nat_withdraw'  : getFormattedNat(user.nat),
+                'tot_withdraw'  : getRandomVal(),
+                'nat_deposit'   : getRndCountry(user.nat),
             };
-            // console.log(userObj);
-
             admin.database().ref('users/' + user.login.username).set(userObj);
-
         ; // END CreateUser
-        
     });
-}
+};
 
 initApp();
