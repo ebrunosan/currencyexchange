@@ -63,7 +63,7 @@ let fillTransferCard = function(userObj) {
     transferDetails += `Quote for 1 ${userObj.nat_withdraw} is ${quote} ${userObj.nat_deposit} <br />`;
     transferDetails += `<strong>Total ${userObj.nat_deposit} $ ${totalDep}</strong>`;
 
-    $("#transfer-flag").attr('src', `../image/${userObj.nat_deposit}.svg`);
+    $("#transfer-flag").attr('src', `./../image/${userObj.nat_deposit}.svg`);
     $("#transfer-title").text(transferTitle);
     $("#transfer-details").html(transferDetails);
 }
