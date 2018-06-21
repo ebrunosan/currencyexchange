@@ -47,7 +47,7 @@ let initQuotes = function() {
         admin.database().ref('quotes/').set(quotes);
     })
     .catch( err => {
-        console.log("error calling apilayer");
+        console.log("error calling apilayer:" + err.message);
     });
 };
 

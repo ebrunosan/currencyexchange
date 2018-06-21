@@ -1,26 +1,16 @@
 /* 
 	Author: 		Bruno Santos
-	Date:			2018-06-16
-	Version: 		1.0
-	Description:	1) Get realtime currency quotes based on API call
-					2) Provides currency exchange conversion
-					3) Formats money exchange card based on users values
+	Date:			2018-06-20
+	Version: 		2.0
+	Description:	1) Get currency quotes based on Firebase DB
 					
-					API documentation: https://currencylayer.com/documentation
-                    
     TTL reference   http://www.brianchildress.co/posts/Giving-Storage-a-Time-To-Live/
 */
 
 "use strict";
-const C_USD = 'USD';
-const C_EXPIRATION_TIME = 60000 * 10;       // 10 minutes 
+const C_EXPIRATION_TIME = 60000 * 30;       // 30 minutes 
+const C_URL = 'https://my-currency-community.firebaseio.com/quotes.json';
 
-//const web_site		= 'https://crossorigin.me/http://apilayer.net/api/';
-const web_site		= 'http://apilayer.net/api/';
-const endpoint 		= 'live'
-const access_key 	= '01daf97ed23634986ca1ce507dde70e7';
-const currencies 	= 'AUD,BRL,CAD,CLP';
-const url			= web_site + endpoint + '?access_key=' + access_key + '&currencies=' + currencies;
 
 class LocalItem {
     
@@ -97,89 +87,30 @@ class LocalItem {
 */
 class Quotes {
     
-    static getQuote( from, to ) {
-        this.existValidQuotes();
-        return this.quotes[from][to];
-    }
-    
-    static getQuotes( from ) {
-        this.existValidQuotes();
-        return this.quotes[from];
-    };
-    
-    static existValidQuotes() {
-        if (this.quotes) return;
-        
-        this.quotes = LocalItem.getLocalItem( "quotes" );
-        
-        if( Object.keys(this.quotes).length == 0 ) {                    // check if there is data on localStorade
-            this.renewQuote();
-            LocalItem.setLocalItem( "quotes", JSON.stringify(this.quotes), C_EXPIRATION_TIME );  
-        }
-    }
+//    static getQuote( from, to ) {
+//        this.existValidQuotes().then( (quotes) => {
+//            return quotes[from][to];
+//        });
+//    }
+//    
+//    static getQuotes( from ) {
+//        this.existValidQuotes().then( (quotes) => {
+//            return quotes[from];
+//        });
+//    }
 
-    static renewQuote() {
-        fetch(url).then( response => {
-            return response.json();
-        })
-        .then( jsonObj => {
-//        let jsonObj = {"success":true, "terms":"https:\/\/currencylayer.com\/terms", "privacy":"https:\/\/currencylayer.com\/privacy", "timestamp":1529208728, "source":"USD", "quotes":{"USDAUD":1.343604, "USDBRL":3.729804, "USDCAD":1.319904, "USDCLP":632.469971}};
-        
-            console.log(jsonObj);
-            this.buildUsdQuote(jsonObj);        // Build USD quotes received from API
-            this.buildOthersQuotes();           // Format others exchange rates
-        })
-        .catch( err => {
-            console.log("error calling apilayer");
-        });
-    }
-    
-    /* It split and build a json quote object based on:
-       (1) USD quotes from API
-    */
-    static buildUsdQuote( jsonObj ) {
-        // Original: "quotes":{"USDCAD":1.29981,"USDBRL":3.719599,"USDUSD":1}
-        let newObj = {};
-        for (let key in jsonObj.quotes) {
-            if (key.substr(3,3) !== C_USD) {
-                newObj[key.substr(3,3)] = jsonObj.quotes[key];
+    static async existValidQuotes() {
+        if ( !this.quotes ) { 
+            this.quotes = LocalItem.getLocalItem( "quotes" );
+
+            if( Object.keys(this.quotes).length == 0 ) {    // check if there is data on localStorade
+                let response = await fetch( C_URL );
+                this.quotes = await response.json();
+                LocalItem.setLocalItem( "quotes", JSON.stringify( this.quotes ), C_EXPIRATION_TIME );  
             }
         }
-        // Expected: quotes["USD"] = { "CAD":1.29981, "BRL":3.719599 }	
-        this.setQuoteObj(C_USD, newObj);
+
+        return Promise.resolve(this.quotes);
     }
     
-    /* It calculater others quotes based on:
-       (1) USD quotes from json object
-    */
-    static buildOthersQuotes() {
-        let newObj, fromSymbol, fromRate;
-
-        for ( let symbol in this.getQuotes(C_USD) ) {			// forEach USD currency
-            newObj = {};							// clear Obj
-
-            fromSymbol = symbol;
-            fromRate = this.getQuote(C_USD, symbol);
-
-            // convert to USD exchange rate to 6 decimal places
-            newObj[C_USD] = parseFloat( (1 / fromRate).toFixed(6) );
-
-            for ( let symbolLoop in this.getQuotes(C_USD) ) {	// forEach USD currency AGAIN
-                if (symbolLoop !== symbol) {		// Others currency exchange
-                    newObj[symbolLoop] = parseFloat( 
-                        ( newObj[C_USD] * this.getQuote(C_USD, symbolLoop) ).toFixed(6) );
-                } // if
-            } // for
-            this.setQuoteObj(fromSymbol, newObj);
-        } // for ext
-    };
-    
-    static setQuoteObj( from, obj ) {
-        this.quotes[from] = obj;
-    }
-    
-    static setQuoteRate( from, to, rate ) {
-        return this.quotes[from][to] = rate;
-    }
-
 } // class

@@ -116,18 +116,6 @@ let getRandomVal = function(nat) {
     return 500 * getRndInteger(1,3);
 };
 
-//let addUserDataToFirebase = function(user) {
-//    // TODO generate random nat_deposit and tot_withdraw
-//    let userObj = {
-//        'phone'         : user.phone,
-//        'nat_withdraw'  : getFormattedNat(user.nat),
-//        'tot_withdraw'  : getRandomVal(),
-//        'nat_deposit'   : getRndCountry(user.nat),
-//    };
-//    console.log(userObj);
-//    admin.database().ref('users/').child(user.login.username).set(userObj); 
-//};
-//
 let addUserToFirebase = function(users) {
     users.map( user => {
         admin.auth().createUser({
@@ -139,22 +127,27 @@ let addUserToFirebase = function(users) {
             emailVerified:  true,
             disabled:       false
     
-            }).then(function(userRecord) {
+            }).then(function( userRecord ) {
+                let userNat = getFormattedNat(user.nat);
+            
+                let userObj = {
+                    'displayName'   : formatName(user.name.first, user.name.last),
+                    'photoURL'      : user.picture.large,
+                    'email'         : user.email,
+                    'phone'         : user.phone,
+                    'nat_withdraw'  : userNat,
+                    'tot_withdraw'  : getRandomVal(),
+                    'nat_deposit'   : getRndCountry(userNat),
+                };
+                
+                admin.database().ref('users/' + user.login.username).set(userObj);
+
                 console.log("Successfully created new user:", user.login.username);
 
             }).catch(function(error) {
                 console.log("Error creating new user:", user.login.username);
-            })
-            
-            let userObj = {
-                'phone'         : user.phone,
-                'nat_withdraw'  : getFormattedNat(user.nat),
-                'tot_withdraw'  : getRandomVal(),
-                'nat_deposit'   : getRndCountry(user.nat),
-            };
-            admin.database().ref('users/' + user.login.username).set(userObj);
-        ; // END CreateUser
-    });
-};
+            }); // END createUser
+    }); // END map
+}; // END function
 
 initApp();

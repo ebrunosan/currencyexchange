@@ -8,7 +8,8 @@ let appRouter = function ( app ) {
 
   // --- return all user's list based on 
   app.get( '/users/all', function ( req, res ) {
-      usersRoute.list( 1000 ).then( ( data ) => {
+      usersRoute.filterUser( 1000 ).then( ( data ) => {
+      //usersRoute.list( 1000 ).then( ( data ) => {
         let users = data;
         res.status( 200 ).send( users );
 
