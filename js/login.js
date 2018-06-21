@@ -73,6 +73,11 @@ firebase.auth().onAuthStateChanged(function( user ) {
 	(1) Sign in user using email and password on Firebase
 */
 $(function() {
+    $( "#btn-users-country" ).click( ( evt ) => {
+        let x = location.pathname;
+        location.pathname = x.substring(0, x.lastIndexOf('/') + 1) + 'users-country.html';
+    });
+
     $( "#btn-login" ).click( ( evt ) => {   // LOGIN
         let email = $( "#user-email" ).val();
         let pswd = $( "#user-pswd" ).val();

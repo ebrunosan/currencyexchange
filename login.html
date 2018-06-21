@@ -76,7 +76,7 @@
                <!-- Navigation -->
                <nav class = "mdl-navigation">
                     <button id = "btn-logout" class = "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
-                    Sign out <img class = "btn-right-icon" src = "image/twotone-account_circle-24px.svg"/>
+                    Sign out <i class="material-icons">exit_to_app</i>
                     </button>
                </nav>
             </div>
@@ -85,11 +85,11 @@
           <div class = "mdl-layout__drawer">
             <span class = "mdl-layout-title">eBrunoSan</span>
             <nav class = "mdl-navigation">
-               <a class = "mdl-navigation__link" href = "">Home</a>
-               <a class = "mdl-navigation__link" href = "">Logout</a>
+               <a class = "mdl-navigation__link" href = "login.html">Home</a>
                <a class = "mdl-navigation__link" href = "">My profile</a>
-               <a class = "mdl-navigation__link" href = "">My transfers</a>
-               <a class = "mdl-navigation__link" href = "">About</a>    
+               <a class = "mdl-navigation__link" href = "users-country.html">Find people</a>
+               <a class = "mdl-navigation__link" href = "">My history</a>
+               <a class = "mdl-navigation__link" href = "">About</a>
             </nav>
           </div>
       
@@ -107,15 +107,20 @@
                     </div>
 
                     <div class="mdl-card__actions mdl-card--border">
-                      <div class="mdl-layout-spacer"></div>
-                      <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Edit</button>
+                        <button class="mdl-button mdl-js-button mdl-button--icon">
+                          <i class="material-icons">edit</i>
+                        </button>
+                        <button class="mdl-button mdl-js-button mdl-button--icon">
+                          <i class="material-icons">settings</i>
+                        </button>
+
                     </div>
                 </div> <!-- MDL card -->
                 
                 <!-- MDL card - Transfer -->
                 <div class="card-transfer mdl-cell mdl-cell--6-col mdl-card mdl-shadow--6dp">
                     <figure class="mdl-card__media">
-                      <img id="transfer-flag" src="http://via.placeholder.com/350x350" alt="" />
+                      <img id="transfer-flag" src="http://via.placeholder.com/350x350" />
                     </figure>
 
                     <div class="mdl-card__title">
@@ -127,8 +132,18 @@
                     </div>
 
                     <div class="mdl-card__actions mdl-card--border">
-                      <div class="mdl-layout-spacer"></div>
-                      <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Edit</button>
+                        <button class="mdl-button mdl-js-button mdl-button--icon">
+                          <i class="material-icons">edit</i>
+                        </button>
+                        <button class="mdl-button mdl-js-button mdl-button--icon">
+                          <i class="material-icons">delete</i>
+                        </button>
+
+                        <div class="mdl-layout-spacer"></div>
+                        
+                        <button id="btn-users-country" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored">
+                          <i class="material-icons">arrow_forward_ios</i>
+                        </button>
                     </div>
                 </div> <!-- MDL card -->
                 
