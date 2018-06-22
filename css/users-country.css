@@ -9,6 +9,7 @@
 }
 
 /* CENTER */
+/*
 .list-center {
     display: flex;
     justify-content: center;
@@ -18,11 +19,26 @@
 .card-transfer {
   width: 310px;
 }
+*/
 
+
+.mdl-grid {
+	max-width: 700px;
+/*   max-height: 50px; */
+}
 .mdl-card__media {
 	margin: 0;
     background: url('http://via.placeholder.com/150x150') center / cover;
 }
 .mdl-card__media > img {
 	max-width: 100%;
+}
+.mdl-card__actions {
+	display: flex;
+	box-sizing:border-box;
+	align-items: center;
+}
+.mdl-card__actions > .mdl-button--icon {
+	margin-right: 3px;
+	margin-left: 3px;
 }
