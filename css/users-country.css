@@ -36,7 +36,7 @@
 }
 .mdl-card__media {
 	margin: 0;
-    background: url('http://via.placeholder.com/150x150') center / cover;
+    background: url('https://via.placeholder.com/150x150') center / cover;
 }
 .mdl-card__media > img {
 	max-width: 100%;
