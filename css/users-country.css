@@ -26,6 +26,14 @@
 	max-width: 700px;
 /*   max-height: 50px; */
 }
+
+.mdl-card {
+  width: 310px;
+}
+
+.card-transfer {
+  height: 434px;
+}
 .mdl-card__media {
 	margin: 0;
     background: url('http://via.placeholder.com/150x150') center / cover;

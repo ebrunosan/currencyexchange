@@ -9,33 +9,98 @@
 
 "use strict";
 /*--
-	It fills the html user card
-	(1) picture, Name, email, and phone
-*/
-let fillUserCard = function( userObj ) {
-//    $( "#user-picture" ).css( 'background-image' , 'url(' + userObj.photoURL + ')');
-//    $( "#user-name" ).text( userObj.displayName );
-//    $( "#user_info" ).html( `${ userObj.email }<br>Phone: ${ userObj.phone }` );
-}
-
-/*--
 	It fills the html transfer card
 	(1) flag, quote, value to withdraw/transfer, total current value to transfer
 */
 let fillTransferCard = function( userObj, quotes) {
-//    // TODO: create CARD html 'Transfer' for each obj in database
-//
-//    let quote = quotes[ userObj.nat_withdraw ][ userObj.nat_deposit ];
-//    let totalDep = ( quote * userObj.tot_withdraw ).toFixed(2);
-//    let transferTitle = `From ${ userObj.nat_withdraw } to ${ userObj.nat_deposit }`;
-//
-//    let transferDetails = `${ userObj.nat_withdraw } $ ${ userObj.tot_withdraw } <br />`;
-//    transferDetails += `Quote for 1 ${ userObj.nat_withdraw } is ${ quote } ${ userObj.nat_deposit } <br />`;
-//    transferDetails += `<strong>Total ${ userObj.nat_deposit } $ ${ totalDep }</strong>`;
-//
-//    $( "#transfer-flag" ).attr( 'src', `./image/${ userObj.nat_deposit }.svg`);
-//    $( "#transfer-title" ).text( transferTitle );
-//    $( "#transfer-details" ).html( transferDetails );
+    // TODO: create CARD html 'Transfer' for each obj in database
+
+    let quote = quotes[ userObj.nat_withdraw ][ userObj.nat_deposit ];
+    let totalDep = ( quote * userObj.tot_withdraw ).toFixed(2);
+    let transferTitle = `From ${ userObj.nat_withdraw } to ${ userObj.nat_deposit }`;
+
+    let transferDetails = `${ userObj.nat_withdraw } $ ${ userObj.tot_withdraw } <br />`;
+    transferDetails += `Quote for 1 ${ userObj.nat_withdraw } is ${ quote } ${ userObj.nat_deposit } <br />`;
+    transferDetails += `<strong>Total ${ userObj.nat_deposit } $ ${ totalDep }</strong>`;
+
+    $( "#transfer-flag" ).attr( 'src', `./image/${ userObj.nat_deposit }.svg`);
+    $( "#transfer-title" ).text( transferTitle );
+    $( "#transfer-details" ).html( transferDetails );
+}
+
+/*--	Create the type of element you pass in the parameters
+*/
+let createNode = function(element) {
+    return document.createElement(element);
+}
+
+/*--	Append the second parameter(element) to the first one
+*/
+let append = function(parent, el) {
+    return parent.appendChild(el);
+}
+
+
+let fillFilteredUsers = function( resultFilter ) {
+
+    let badge = 1;  // TODO
+    let count = 0;
+    
+    for(let user in resultFilter) {
+        count += 1;
+//        if (count > 1) continue;
+        let liElement = 
+            `<li class="mdl-list__item mdl-list__item--two-line">`;
+
+        liElement += 
+            `<span class="mdl-list__item-primary-content">` +
+                `<i  class="material-icons  mdl-list__item-avatar mdl-badge  mdl-badge--overlap"  data-badge="${badge}">compare_arrows</i>` +
+                `<span>${resultFilter[user].displayName}</span>` +
+                `<span  class="mdl-list__item-sub-title">${resultFilter[user].nat_deposit} $ ${resultFilter[user].tot_withdraw}</span>` +
+            `</span>`;
+
+        liElement += 
+            `<span  class="mdl-list__item-secondary-action" >` +
+                `<label  for="switch-${count}" >` +
+                    `<input  type="checkbox"  id="switch-${count}"/>` +
+                `</label>` +
+            `</span>`;
+
+//        liElement += 
+//            `<span  class="mdl-list__item-secondary-action" >` +
+//                `<label  class="mdl-switch  mdl-js-switch  mdl-js-ripple-effect"  for="list-checkbox-${count}" >` +
+//                    `<input  type="checkbox"  id="list-checkbox-${count}"  class = "mdl-switch__input" />` +
+//                `</label>` +
+//            `</span>`;
+
+        liElement += `</li>`;
+        
+        $( '.mdl-list' ).append( liElement );
+    };
+    
+    $('li label').addClass('mdl-switch  mdl-js-switch  mdl-js-ripple-effect');
+    $('li input').addClass('mdl-switch__input');
+}
+
+let getUserDataAndList = function (user) {
+    firebase.database().ref( '/users/' + user.uid ).once( 'value' ).then( function( snapshot ) {
+        let userObj = snapshot.val();
+        
+        Quotes.existValidQuotes().then( ( quotes ) => {
+            fillTransferCard( userObj, quotes );
+    		const url = `https://my-currency-community.firebaseio.com/users.json?orderBy="nat_deposit"&equalTo="${userObj.nat_deposit}"&print=pretty`;
+		
+            fetch(url).then( response => {
+                return response.json();
+            }).then( data => {
+//                console.log(data);
+                fillFilteredUsers(data);
+            }).catch( err => {
+                console.log("Error filtering users from Firebase");
+            }); // END filtered users 
+        }); // END Quotes
+    }); // END get user 
+
 }
 
 /*--
@@ -49,15 +114,10 @@ firebase.auth().onAuthStateChanged(function( user ) {
         let user = firebase.auth().currentUser;
 
         if ( user !== null ) {
-            firebase.database().ref( '/users/' + user.uid ).once( 'value' ).then( function( snapshot ) {
-                let userObj = snapshot.val();
-                
-                Quotes.existValidQuotes().then( ( quotes ) => {
-                    fillUserCard( userObj );
-                    fillTransferCard( userObj, quotes );
-                });
-            });
-        } //end user not null
+            getUserDataAndList( user );
+        } else {
+            console.log( "Error getting currentUser");
+        }
     } else {                            // User is logged out
 
         let x = location.pathname;
