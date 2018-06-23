@@ -38,6 +38,7 @@ let fillTransferCard = function( userObj, quotes) {
     $( "#transfer-details" ).html( transferDetails );
 }
 
+
 /*--
 	It is a Firebase event handler to check authentication changes
 	(1) get authenticated user info and users information
@@ -64,6 +65,9 @@ firebase.auth().onAuthStateChanged(function( user ) {
         } //end user not null
     } else {                            // User is logged out
         $( ".login-cover" ).show();     // Show login dialog
+        if (! dialog.showModal) {
+            dialogPolyfill.registerDialog(dialog);
+        }
         dialog.showModal();
     } // end user
 }); // end onAuthStateChanged
@@ -73,6 +77,21 @@ firebase.auth().onAuthStateChanged(function( user ) {
 	(1) Sign in user using email and password on Firebase
 */
 $(function() {
+    var availableTags = [
+      "malik.gill@example.com",
+      "oliver.gagnon@example.com",
+      "ulrich.morin@example.com",
+      "april.mitchelle@example.com",
+      "penny.lane@example.com",
+      "jonathan.phillips@example.com",
+      "cláudia.damota@example.com",
+      "jamile.daconceição@example.com",
+      "joe.shelton@example.com",
+    ];
+    $( "#user-email" ).autocomplete({
+      source: availableTags
+    });
+    
     $( "#btn-users-country" ).click( ( evt ) => {
         let x = location.pathname;
         location.pathname = x.substring(0, x.lastIndexOf('/') + 1) + 'users-country.html';

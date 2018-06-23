@@ -26,6 +26,9 @@ let fillTransferCard = function( userObj, quotes) {
     $( "#transfer-flag" ).attr( 'src', `./image/${ userObj.nat_deposit }.svg`);
     $( "#transfer-title" ).text( transferTitle );
     $( "#transfer-details" ).html( transferDetails );
+
+    $( "#transfer-to-flag" ).attr( 'src', `./image/${ userObj.nat_withdraw }.svg`);
+    $( "#transfer-to-title" ).text( `From ${ userObj.nat_deposit } to ${ userObj.nat_withdraw }` );
 }
 
 /*--	Create the type of element you pass in the parameters
@@ -48,13 +51,19 @@ let fillFilteredUsers = function( resultFilter ) {
     
     for(let user in resultFilter) {
         count += 1;
-//        if (count > 1) continue;
+        let badge = resultFilter[user].badge
         let liElement = 
             `<li class="mdl-list__item mdl-list__item--two-line">`;
 
         liElement += 
             `<span class="mdl-list__item-primary-content">` +
-                `<i  class="material-icons  mdl-list__item-avatar mdl-badge  mdl-badge--overlap"  data-badge="${badge}">compare_arrows</i>` +
+                `<i  class="material-icons  mdl-list__item-avatar mdl-badge  mdl-badge--overlap"`;
+        
+        if (badge > 0) {
+            liElement += ` data-badge="${badge}"`;
+        }
+
+        liElement += `>compare_arrows</i>` +
                 `<span>${resultFilter[user].displayName}</span>` +
                 `<span  class="mdl-list__item-sub-title">${resultFilter[user].nat_deposit} $ ${resultFilter[user].tot_withdraw}</span>` +
             `</span>`;

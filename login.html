@@ -12,9 +12,6 @@
         <!-- Google fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
         
-        <!-- Jquery -->
-        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-
         <!-- Main CSS -->
         <link rel="stylesheet" href="css/login.css"/>
     </head>
@@ -29,10 +26,10 @@
             <div class="mdl-dialog__content">
                 <p id="msgLoginError"></p>
                 
-                <!-- USER ID  -->
+                <!-- USER EMAIL  -->
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input class="mdl-textfield__input" type="text" id="user-email">
-                    <label class="mdl-textfield__label" for="user-login">Email...</label>
+                    <label class="mdl-textfield__label" for="user-email">Email...</label>
                 </div>
 
                 <!-- PASSWORD  -->
@@ -169,6 +166,14 @@
       <script src="https://code.jquery.com/jquery-3.3.1.min.js"
           integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
           crossorigin="anonymous"></script>
+
+      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        
+      <!-- Dialog polyfil -->
+      <script defer src="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.4.2/dialog-polyfill.min.js"></script>
+
+      <!-- Jquery -->
+      <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 
       <!-- Custom scripts -->
       <script src="js/quotes.js"></script>

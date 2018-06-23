@@ -8,20 +8,6 @@
     margin-left: 10px;
 }
 
-/* CENTER */
-/*
-.list-center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.card-transfer {
-  width: 310px;
-}
-*/
-
-
 .mdl-grid {
 	max-width: 700px;
 /*   max-height: 50px; */
@@ -34,9 +20,9 @@
 .card-transfer {
   height: 434px;
 }
+
 .mdl-card__media {
 	margin: 0;
-    background: url('https://via.placeholder.com/150x150') center / cover;
 }
 .mdl-card__media > img {
 	max-width: 100%;

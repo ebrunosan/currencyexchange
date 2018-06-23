@@ -24,7 +24,7 @@ admin.initializeApp({
 let initApp = function() {
     clearUsersLogin();
 
-	const url = 'https://randomuser.me/api/?results=50&nat=au,ca,ch,br,us&inc=login,name,email,picture,nat,phone';
+	const url = 'https://randomuser.me/api/?seed=foo&results=50&nat=au,ca,ch,br,us&inc=login,name,email,picture,nat,phone';
 
 	fetch(url)
 		.then( response => {
@@ -116,6 +116,12 @@ let getRandomVal = function(nat) {
     return 500 * getRndInteger(1,3);
 };
 
+// returns random values: 500 or 1000 or 1500
+let getRandomBadge = function(nat) {
+    let num = getRndInteger(1,10);
+    return (num < 5? 0 : num);
+};
+
 let addUserToFirebase = function(users) {
     users.map( user => {
         admin.auth().createUser({
@@ -138,6 +144,7 @@ let addUserToFirebase = function(users) {
                     'nat_withdraw'  : userNat,
                     'tot_withdraw'  : getRandomVal(),
                     'nat_deposit'   : getRndCountry(userNat),
+                    'badge'         : getRandomBadge(),
                 };
                 
                 admin.database().ref('users/' + user.login.username).set(userObj);
