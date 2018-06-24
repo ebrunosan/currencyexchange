@@ -1,0 +1,19 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Nunito', sans-serif;
+}
+
+#mycard {
+  height: 600px;
+  width:100%;
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.mdl-card__actions {
+	display: flex;
+	box-sizing:border-box;
+	align-items: center;
+}

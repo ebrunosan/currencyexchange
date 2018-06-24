@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Bruno Santos [eBrunoSan]</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Material Design includes        -->
+        <link href="https://code.getmdl.io/1.3.0/material.indigo-red.min.css" rel="stylesheet" />
+        
+        <!-- Google fonts -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet" />
+        
+        <!-- Main CSS -->
+        <link href="css/index.css" rel="stylesheet" />
+    </head>
+
+    <!-- BODY -->
+    <body>
+        
+        <!-- Login Dialog box       -->
+        
+        <dialog id="login-dialog" class="mdl-dialog">
+            <h4 class="mdl-dialog__title">Social Currency</h4>
+            <div class="mdl-dialog__content">
+                <p>Ipsum lorem ...</p>
+            </div>
+            <div class="mdl-dialog__actions">
+                <button id="btn-login" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">Ok</button>
+            </div>
+        </dialog>
+        
+        
+        <!-- Always shows a header, even in smaller screens. -->
+        <div class = "mdl-layout mdl-js-layout mdl-layout--fixed-header">
+          
+          <header class = "mdl-layout__header">
+            <div class = "mdl-layout__header-row">
+               <!-- Title -->
+               <span class="mdl-layout__title">Social Currency</span>
+                
+               <!-- Add spacer, to align navigation to the right -->
+               <div class = "mdl-layout-spacer"></div>
+            </div>
+          </header>
+         
+          <div class = "mdl-layout__drawer">
+            <span class = "mdl-layout-title">eBrunoSan</span>
+            <nav class = "mdl-navigation">
+               <a class = "mdl-navigation__link" href = "index.html">Home</a>
+               <a class = "mdl-navigation__link" href = "login.html">Login</a>
+               <a class = "mdl-navigation__link" href = "">About</a>
+            </nav>
+          </div>
+      
+          <main class = "mdl-layout__content  mdl-color--grey-300">
+            <div id="mycard">
+
+              <div class="mdl-card mdl-shadow--6dp">
+                <div class="mdl-card__title">
+                  <h2 class="mdl-card__title-text">Welcome!</h2>
+                </div>
+
+                <div class="mdl-card__supporting-text">
+                  <p>This project is part of a <a href='http://www.prodigidevelopment.com/'>ProDigi Bootcamp Course</a>, 
+                      which was developed in: Javascript, NodeJS, <a href='https://getmdl.io/'>Google Material Design Lite</a>,
+                      <a href='https://firebase.google.com/'>Firebase</a>, 
+                      <a href='https://randomuser.me/documentation'>RandomUser API</a>, and 
+                      <a href='https://apilayer.com/'>Apilayer API</a>
+                      
+                  <div class="mdl-card__actions mdl-card--border">
+                      by <a href='http://en.gravatar.com/ebrunosan'>Bruno Santos</a>
+                      <div class="mdl-layout-spacer"></div>
+                      
+                      <button id="btn-run" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+                        Run
+                      </button>
+                  </div>
+                  <!-- MDL-card actions -->
+
+                </div>
+                <!-- MDL-card supporting text -->
+
+              </div>
+              <!-- MDL card-->
+
+            </div>    
+            <!-- -->
+
+          </main>
+          
+      </div> <!-- MDL layout -->
+        
+      <!-- Page scripts -->
+      <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+          integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+          crossorigin="anonymous"></script>
+
+      <!-- MDL -->
+      <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+        
+      <!-- Custom scripts -->
+      <script defer src="js/index.js"></script>
+
+    </body>
+</html>
