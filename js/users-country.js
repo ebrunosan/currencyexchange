@@ -56,7 +56,7 @@ let fillFilteredUsers = function( resultFilter, onlyOtherUid, onlyNatWithdraw ) 
         count += 1;
 
         let badge = '';     // define the badge attribute to be inserted into li element
-        if (badge > 0) { badge = ` data-badge="${badge}" `; }
+        if (resultFilter[user].badge > 0) { badge = ` data-badge="${resultFilter[user].badge}" `; }
         
         // TODO -> avoid stringify Object to store at checkbox value
         let objStr = resultFilter[user].email;

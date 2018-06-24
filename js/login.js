@@ -96,9 +96,12 @@ $(function() {
             $('#user-email').val('');           // clear user email if previous selected
             $('#cmb-user-email li').remove();   // clear previous li's added elements
             for(let user in data) {
-                $('#cmb-user-email').append(    // append emails from filtered search
-                    `<li class="mdl-menu__item" data-val="${ data[user].email }">${ data[user].email }</li>`
-                );
+                // Ignore non-valid emails
+                if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test( data[user].email ) ) {
+                    $('#cmb-user-email').append(    // append emails from filtered search
+                        `<li class="mdl-menu__item" data-val="${ data[user].email }">${ data[user].email }</li>`
+                    );
+                }
             }
 
             // IMPORTANT: in order to "refresh" Material Design Lite 
