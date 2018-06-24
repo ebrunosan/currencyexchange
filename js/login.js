@@ -77,24 +77,42 @@ firebase.auth().onAuthStateChanged(function( user ) {
 	(1) Sign in user using email and password on Firebase
 */
 $(function() {
-    var availableTags = [
-      "malik.gill@example.com",
-      "oliver.gagnon@example.com",
-      "ulrich.morin@example.com",
-      "april.mitchelle@example.com",
-      "penny.lane@example.com",
-      "jonathan.phillips@example.com",
-      "cláudia.damota@example.com",
-      "jamile.daconceição@example.com",
-      "joe.shelton@example.com",
-    ];
-    $( "#user-email" ).autocomplete({
-      source: availableTags
+    $( "#cmb-country" ).change( ( evt ) => {
+        var countryList = {         // TODO: try to get the value from selected element
+          'Australia'   : 'AUD',
+          'Brazil'      : 'BRL',
+          'Canada'      : 'CAD',
+          'Chile'       : 'CLP',
+          'USA'         : 'USD',
+        };
+
+        let country = $('#cmb-country').val();
+        
+		const url = `https://my-currency-community.firebaseio.com/users.json?orderBy="nat_withdraw"&equalTo="${ countryList[country] }"&print=pretty`;
+		
+        fetch(url).then( response => {
+            return response.json();
+        }).then( data => {
+            $('#user-email').val('');           // clear user email if previous selected
+            $('#cmb-user-email li').remove();   // clear previous li's added elements
+            for(let user in data) {
+                $('#cmb-user-email').append(    // append emails from filtered search
+                    `<li class="mdl-menu__item" data-val="${ data[user].email }">${ data[user].email }</li>`
+                );
+            }
+
+            // IMPORTANT: in order to "refresh" Material Design Lite 
+            getmdlSelect.init('#div-user-email');
+
+        }).catch( err => {
+            console.log("Error filtering users from Firebase");
+        }); // END filtered users 
     });
+
     
     $( "#btn-users-country" ).click( ( evt ) => {
-        let x = location.pathname;
-        location.pathname = x.substring(0, x.lastIndexOf('/') + 1) + 'users-country.html';
+        let path = location.pathname;
+        location.pathname = path.substring(0, path.lastIndexOf('/') + 1) + 'users-country.html';
     });
 
     $( "#btn-login" ).click( ( evt ) => {   // LOGIN

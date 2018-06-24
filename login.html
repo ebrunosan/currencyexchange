@@ -6,14 +6,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <!-- Material Design includes        -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-red.min.css" />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+        <link href="https://code.getmdl.io/1.3.0/material.indigo-red.min.css" rel="stylesheet" />
         
         <!-- Google fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet" />
         
         <!-- Main CSS -->
-        <link rel="stylesheet" href="css/login.css"/>
+        <link href="css/login.css" rel="stylesheet" />
     </head>
 
     <!-- BODY -->
@@ -25,16 +25,40 @@
             <h4 class="mdl-dialog__title">Sign in</h4>
             <div class="mdl-dialog__content">
                 <p id="msgLoginError"></p>
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height">
+                    <input type="text" value="" class="mdl-textfield__input" id="cmb-country" readonly>
+                    <input type="hidden" value="" name="cmb-country">
+                    <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
+                    <label for="cmb-country" class="mdl-textfield__label">Country</label>
+                    <ul for="cmb-country" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
+                        <li class="mdl-menu__item" data-val="AUD">Australia</li>
+                        <li class="mdl-menu__item" data-val="BLR">Brazil</li>
+                        <li class="mdl-menu__item" data-val="CAD">Canada</li>
+                        <li class="mdl-menu__item" data-val="CLP">Chile</li>
+                        <li class="mdl-menu__item" data-val="USD">USA</li>
+                    </ul>
+                </div>
+
                 
                 <!-- USER EMAIL  -->
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="text" id="user-email">
-                    <label class="mdl-textfield__label" for="user-email">Email...</label>
+                <div id="div-user-email" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height">
+                    <input type="text" value="" class="mdl-textfield__input" id="user-email" readonly>
+                    <input type="hidden" value="" name="user-email">
+                    <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
+                    <label for="user-email" class="mdl-textfield__label">Email</label>
+                    <ul id="cmb-user-email" for="user-email" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
+                        
+                        <!--    dynamicly inserted upon country change
+                                <li class="mdl-menu__item" data-val=" ..."> ... </li>
+                        -->
+                        
+                    </ul>
                 </div>
 
                 <!-- PASSWORD  -->
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="password" id="user-pswd">
+                    <input class="mdl-textfield__input" value="password" type="password" id="user-pswd">
                     <label class="mdl-textfield__label" for="user-pswd">Password...</label>
                 </div>
 
@@ -167,13 +191,19 @@
           integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
           crossorigin="anonymous"></script>
 
+      <!-- Jquery -->
       <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         
       <!-- Dialog polyfil -->
       <script defer src="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.4.2/dialog-polyfill.min.js"></script>
 
-      <!-- Jquery -->
+      <!-- MDL -->
       <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+        
+      <!--getmdl-select-->   
+      <link href="js/getmdl-select-master/getmdl-select.min.css " rel="stylesheet" />
+      <script defer src="js/getmdl-select-master/getmdl-select.min.js"></script>
+
 
       <!-- Custom scripts -->
       <script src="js/quotes.js"></script>

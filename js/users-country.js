@@ -13,8 +13,6 @@
 	(1) flag, quote, value to withdraw/transfer, total current value to transfer
 */
 let fillTransferCard = function( userObj, quotes) {
-    // TODO: create CARD html 'Transfer' for each obj in database
-
     let quote = quotes[ userObj.nat_withdraw ][ userObj.nat_deposit ];
     let totalDep = ( quote * userObj.tot_withdraw ).toFixed(2);
     let transferTitle = `From ${ userObj.nat_withdraw } to ${ userObj.nat_deposit }`;
@@ -27,83 +25,86 @@ let fillTransferCard = function( userObj, quotes) {
     $( "#transfer-title" ).text( transferTitle );
     $( "#transfer-details" ).html( transferDetails );
 
+    /*  Those data are part of the second card
+    *
+    *   TODO: create dynamicly card only if there is data to be listed 
+    */ 
+    
     $( "#transfer-to-flag" ).attr( 'src', `./image/${ userObj.nat_withdraw }.svg`);
     $( "#transfer-to-title" ).text( `From ${ userObj.nat_deposit } to ${ userObj.nat_withdraw }` );
 }
 
-/*--	Create the type of element you pass in the parameters
+/*--
+	It formats and add LI element to the card
+	(1) the filter is NOT completely made by Firebase query
+	(2) the 2 parameters ARE part of the query to filter users
+	(3) TODO 1: store data to send to the next webpage after selection
+	(4) TODO 2: study delete | show details of each LI elements selected by user 
 */
-let createNode = function(element) {
-    return document.createElement(element);
-}
-
-/*--	Append the second parameter(element) to the first one
-*/
-let append = function(parent, el) {
-    return parent.appendChild(el);
-}
-
-
-let fillFilteredUsers = function( resultFilter ) {
-
-    let badge = 1;  // TODO
-    let count = 0;
+let fillFilteredUsers = function( resultFilter, onlyOtherUid, onlyNatWithdraw ) {
+    let count = 0;          // counter for each LI element listed 
     
     for(let user in resultFilter) {
-        count += 1;
-        let badge = resultFilter[user].badge
-        let liElement = 
-            `<li class="mdl-list__item mdl-list__item--two-line">`;
-
-        liElement += 
-            `<span class="mdl-list__item-primary-content">` +
-                `<i  class="material-icons  mdl-list__item-avatar mdl-badge  mdl-badge--overlap"`;
+        /* QUERY DEFINITION: 
+            -> list users who wants to deposit at the country who users wants to withdraw 
+            
+            IMPORTANT: Firebase has no multiple condition to query. For this reason, it has to ignore some content here
+        */
+        if ( user === onlyOtherUid ) { continue; }
+        if ( resultFilter[user].nat_withdraw !== onlyNatWithdraw ) { continue; }
         
-        if (badge > 0) {
-            liElement += ` data-badge="${badge}"`;
-        }
+        count += 1;
 
-        liElement += `>compare_arrows</i>` +
+        let badge = '';     // define the badge attribute to be inserted into li element
+        if (badge > 0) { badge = ` data-badge="${badge}" `; }
+        
+        // TODO -> avoid stringify Object to store at checkbox value
+        let objStr = resultFilter[user].email;
+
+        // define LI element using Google MDL style
+        let liElement = 
+        `<li class="mdl-list__item mdl-list__item--two-line">` +
+            `<span class="mdl-list__item-primary-content">` +
+                `<i class="material-icons mdl-list__item-avatar mdl-badge mdl-badge--overlap" ${badge}">compare_arrows</i>` +
                 `<span>${resultFilter[user].displayName}</span>` +
-                `<span  class="mdl-list__item-sub-title">${resultFilter[user].nat_deposit} $ ${resultFilter[user].tot_withdraw}</span>` +
-            `</span>`;
-
-        liElement += 
+                `<span class="mdl-list__item-sub-title">${resultFilter[user].nat_withdraw} $ ${resultFilter[user].tot_withdraw}</span>` +
+            `</span>` +
             `<span  class="mdl-list__item-secondary-action" >` +
                 `<label  for="switch-${count}" >` +
-                    `<input  type="checkbox"  id="switch-${count}"/>` +
+                    `<input  type="checkbox" value="${objStr}"  id="switch-${count}"/>` +
                 `</label>` +
-            `</span>`;
-
-//        liElement += 
-//            `<span  class="mdl-list__item-secondary-action" >` +
-//                `<label  class="mdl-switch  mdl-js-switch  mdl-js-ripple-effect"  for="list-checkbox-${count}" >` +
-//                    `<input  type="checkbox"  id="list-checkbox-${count}"  class = "mdl-switch__input" />` +
-//                `</label>` +
-//            `</span>`;
-
-        liElement += `</li>`;
+            `</span>` +
+        `</li>`;
         
         $( '.mdl-list' ).append( liElement );
     };
     
+    // adding style based on Google MDL structure
     $('li label').addClass('mdl-switch  mdl-js-switch  mdl-js-ripple-effect');
     $('li input').addClass('mdl-switch__input');
+
+    // IMPORTANT: in order to "refresh" Material Design Lite 
+    componentHandler.upgradeElements( document.getElementsByClassName('mdl-list') );
 }
 
+/*--
+	It filters data from Firebase, based on users data
+*/
 let getUserDataAndList = function (user) {
     firebase.database().ref( '/users/' + user.uid ).once( 'value' ).then( function( snapshot ) {
         let userObj = snapshot.val();
         
         Quotes.existValidQuotes().then( ( quotes ) => {
+            /* QUERY DEFINITION: 
+                -> list users who wants to deposit at the country who users wants to withdraw 
+            */
             fillTransferCard( userObj, quotes );
-    		const url = `https://my-currency-community.firebaseio.com/users.json?orderBy="nat_deposit"&equalTo="${userObj.nat_deposit}"&print=pretty`;
+    		const url = `https://my-currency-community.firebaseio.com/users.json?orderBy="nat_deposit"&equalTo="${userObj.nat_withdraw}"&print=pretty`;
 		
             fetch(url).then( response => {
                 return response.json();
             }).then( data => {
-//                console.log(data);
-                fillFilteredUsers(data);
+                fillFilteredUsers(data, user.uid, userObj.nat_deposit);
             }).catch( err => {
                 console.log("Error filtering users from Firebase");
             }); // END filtered users 
@@ -129,8 +130,8 @@ firebase.auth().onAuthStateChanged(function( user ) {
         }
     } else {                            // User is logged out
 
-        let x = location.pathname;
-        location.pathname = x.substring(0, x.lastIndexOf('/') + 1) + 'login.html';
+        let path = location.pathname;
+        location.pathname = path.substring(0, path.lastIndexOf('/') + 1) + 'login.html';
     
     } // end user
 }); // end onAuthStateChanged
@@ -140,20 +141,27 @@ firebase.auth().onAuthStateChanged(function( user ) {
 	(1) Sign in user using email and password on Firebase
 */
 $(function() {
-    $( "#btn-home" ).click( ( evt ) => {
-        let x = location.pathname;
-        location.pathname = x.substring(0, x.lastIndexOf('/') + 1) + 'login.html';
-    });
+    $( "#btn-home" ).click( ( evt ) => {            // HOME
+        let path = location.pathname;
+        location.pathname = path.substring(0, path.lastIndexOf('/') + 1) + 'login.html';
+    }); // end btn-home
 
+    // TODO: send data to the next page
+    $( "#btn-make-proposal" ).click( ( evt ) => {   // MAKE-PROPOSAL
+        
+        $( '.mdl-list input:checked' ).each( function() {
+            console.log( $(this).val() );
+        });
+    }); // end btn-make-proposal
+    
     $( "#btn-logout" ).click( ( evt ) => {          // LOGOUT
         firebase.auth().signOut().then( function() {
-            let x = location.pathname;
-            location.pathname = x.substring(0, x.lastIndexOf('/') + 1) + 'login.html';
-
+            let path = location.pathname;
+            location.pathname = path.substring(0, path.lastIndexOf('/') + 1) + 'login.html';
         })
         .catch( function( error ) {
           // TODO: Handle Errors here.
           console.log(`${ error.code } - ${ error.message }`);
         });
-    }); // end click
+    }); // end btn-logout
 }); // document ready
